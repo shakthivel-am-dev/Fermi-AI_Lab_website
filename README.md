@@ -6,5 +6,5 @@ AnYwAy HeRe Is ThE lInK fOr ThE sItE: [click here](https://shakthivel-am-dev.git
   🚧 STILL UNDER PROGRESS 🚧
 </h1>
 <p align="center">
-  <img src="sauce/img/still-under.png" alt="Description" width="300">
+  <img src="sauce/img/still-under.png" alt="Description" width="600">
 </p>
