@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fermi-AI Lab</title>
+<style>
+:root{--bg:#f5f8fd;--card:#fff;--text:#0e1b36;--mute:#51607e;--blue:#1d5fd1;--gold:#c8941a;--line:#dbe3f1;--shadow:0 8px 24px rgba(20,50,110,.12);--hero:linear-gradient(135deg,#1d5fd1,#0b2e75);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070d1c;--card:#0f1a33;--text:#e8eefc;--mute:#9bacd0;--blue:#4c8dff;--gold:#f0b93a;--line:#1f2f55;--shadow:0 8px 24px rgba(0,0,0,.5);--hero:linear-gradient(135deg,#0d2a66,#050b1a);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070d1c;--card:#0f1a33;--text:#e8eefc;--mute:#9bacd0;--blue:#4c8dff;--gold:#f0b93a;--line:#1f2f55;--shadow:0 8px 24px rgba(0,0,0,.5);--hero:linear-gradient(135deg,#0d2a66,#050b1a);color-scheme:dark}
+html{scroll-behavior:smooth;scroll-padding-top:calc(70px + env(safe-area-inset-top,0px))}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;line-height:1.6;transition:background .3s,color .3s}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--card)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:12px 5%}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.2rem;letter-spacing:.5px}.logo b{color:var(--gold)}
+.logo img{height:38px;width:auto;border-radius:8px;border:1px solid var(--gold)}
+nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+nav a{color:var(--text);text-decoration:none;font-size:.92rem;font-weight:500}nav a:hover{color:var(--gold)}
+#theme{border:1px solid var(--gold);background:none;color:var(--gold);border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.85rem}
+section{padding:64px 5%;max-width:1100px;margin:auto}
+h2{font-size:1.8rem;margin:0 0 6px}h2::after{content:"";display:block;width:60px;height:4px;border-radius:2px;margin-top:8px;background:linear-gradient(90deg,var(--blue),var(--gold))}
+.sub{color:var(--mute);margin:0 0 28px}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center}
+.hero h1{font-size:2.4rem;line-height:1.15;margin:0 0 12px}.hero h1 span{background:linear-gradient(90deg,var(--blue),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mute)}
+.slider{position:relative;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);aspect-ratio:4/3;border:1px solid var(--line)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;display:flex;align-items:flex-end;padding:18px;color:#fff;background-size:cover;background-position:center}
+.slide.on{opacity:1}
+.slide span{background:rgba(0,0,0,.45);padding:6px 12px;border-radius:8px;font-size:.9rem}
+.dots{position:absolute;bottom:10px;right:14px;display:flex;gap:6px}
+.dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer}.dots i.on{background:var(--gold)}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.center{display:flex;justify-content:center}.center .person{width:min(320px,100%)}
+.bar{height:3px;width:120px;margin:28px auto;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--gold))}
+.lbl{text-align:center;font-weight:700;color:var(--gold);letter-spacing:1px;text-transform:uppercase;font-size:.85rem;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;text-align:center;cursor:pointer;box-shadow:var(--shadow);transition:transform .25s,border-color .25s,box-shadow .25s}
+.card:hover,.card:focus-visible{transform:translateY(-5px);border-color:var(--gold);outline:none}
+.av{width:124px;height:124px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:2.2rem;font-weight:700;color:#fff;overflow:hidden;border:3px solid var(--gold);background:linear-gradient(135deg,var(--blue),var(--gold));transition:transform .25s}.center .av{width:150px;height:150px}.av svg,.av img,.big svg,.big img{width:100%;height:100%;object-fit:cover;display:block}
+.card:hover .av{transform:scale(1.07)}
+.card h3{margin:4px 0;font-size:1.05rem}.card small{color:var(--mute);display:block}.tag{display:inline-block;margin-top:8px;font-size:.78rem;color:var(--blue);border:1px solid var(--blue);border-radius:12px;padding:1px 10px}
+.rcard{text-align:left}.rcard h3{font-size:1rem}.rcard .meta{color:var(--gold);font-size:.8rem;font-weight:600}
+.pbar{height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:10px}.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--gold))}
+#ov{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,10,25,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#ov.open{display:flex;animation:f .25s}
+@keyframes f{from{opacity:0}}
+#box{background:var(--card);border:1px solid var(--gold);border-radius:18px;width:min(860px,100%);max-height:86vh;overflow:auto;padding:26px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:p .3s}
+@keyframes p{from{transform:scale(.94);opacity:0}}
+#box h3{margin:0 0 2px;font-size:1.4rem}#box h4{margin:16px 0 4px;color:var(--gold);font-size:.85rem;text-transform:uppercase;letter-spacing:.8px}
+#box p,#box li{color:var(--mute);margin:2px 0}#box ul{padding-left:18px;margin:0}
+.x{position:absolute;top:10px;right:14px;background:none;border:0;font-size:1.6rem;color:var(--mute);cursor:pointer}
+.head{display:flex;gap:16px;align-items:center}.head .av{margin:0;flex:none}
+.mail{color:var(--blue);cursor:pointer;text-decoration:underline dotted;font-weight:600}
+.doi{display:inline-block;margin-top:14px;padding:8px 18px;border-radius:20px;background:linear-gradient(90deg,var(--blue),var(--gold));color:#fff;text-decoration:none;font-weight:600}
+.poster{width:100%;border-radius:12px;margin:10px 0;display:block}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(80px);background:var(--gold);color:#111;padding:8px 18px;border-radius:20px;z-index:200;transition:transform .3s;font-weight:600}
+#toast.show{transform:translateX(-50%)}
+.mrow{display:grid;grid-template-columns:260px 1fr;gap:26px;align-items:start}.big{width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;border:2px solid var(--gold);display:grid;place-items:center;font-size:4rem;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--blue),var(--gold))}.mrow h3{padding-right:28px}
+.slider{cursor:zoom-in}#box.wide{width:min(1100px,96vw);height:min(90vh,820px);display:flex;flex-direction:column}.lb{flex:1;min-height:220px;border-radius:14px;margin:12px 0;display:grid;place-items:center;text-align:center;color:#fff;font-size:1.3rem;padding:20px}.lb small{display:block;font-size:.85rem;opacity:.85}
+.big,.av{position:relative}.av img,.big img{position:absolute;inset:0}
+#box.pm{overflow:hidden;height:min(86vh,620px)}.pm .mrow{height:100%;align-items:center}.pm .info{align-self:stretch;max-height:100%;overflow:auto;padding-right:10px}
+.lbw{flex:1;display:flex;gap:10px;min-height:0;margin:12px 0}.lbw .lb{flex:1;margin:0}.nv{border:1px solid var(--gold);background:var(--card);color:var(--gold);width:44px;height:64px;align-self:center;border-radius:12px;font-size:2rem;line-height:1;cursor:pointer}.nv:hover{background:var(--gold);color:#111}
+@media(max-width:700px){#box.pm{height:88vh}.pm .mrow{grid-template-rows:auto minmax(0,1fr);align-items:start}.pm .big{max-width:150px;font-size:2.6rem}.pm .info{min-height:0;height:100%}.nv{width:32px}}
+footer{text-align:center;padding:30px 5%;color:var(--mute);border-top:1px solid var(--line);font-size:.9rem}
+@media(max-width:820px){.hero{grid-template-columns:1fr}.hero h1{font-size:1.9rem}nav a{display:none}}
+@media(max-width:700px){.row{grid-template-columns:1fr}section{padding:44px 5%}.mrow{grid-template-columns:1fr}.big{max-width:230px;margin:0 auto}}
+@media(min-width:701px) and (max-width:900px){.row{gap:12px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<header><div class="logo"><img src="data:image/webp;base64,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" alt="Fermi-AI Lab logo">FERMI<b>-AI</b> LAB</div>
+<nav><a href="#about">About</a><a href="#members">Members</a><a href="#past">Published</a><a href="#current">Current</a><button id="theme" aria-label="Toggle theme">☾ Night</button></nav></header>
+
+<section id="about"><div class="hero">
+<div><h1>First-principles meets <span>Artificial Intelligence</span></h1>
+<p>Fermi-AI Lab is a research group in the Department of Physics and Nanotechnology, SRM Institute of Science and Technology, working on first-principles electronic structure research and materials informatics.</p>
+<p>Our cause: the data-driven discovery of quantum and functional materials — faster, cheaper and more sustainable — while training the next generation of computational scientists.</p></div>
+<div class="slider" id="slider"><div class="dots" id="dots"></div></div>
+</div></section>
+
+<section id="members"><h2>Our Members</h2><p class="sub">Click a person to know more.</p>
+<div class="center" id="prof"></div><div class="bar"></div>
+<div class="lbl">Ph.D. Research Scholars</div><div class="row" id="phd"></div><div class="bar"></div>
+<div class="lbl">M.Sc. Students</div><div class="row" id="msc"></div><div class="bar"></div>
+<div class="lbl">Alumni</div><div class="row" id="alu"></div></section>
+
+<section id="past"><h2>Published Research</h2><p class="sub">Selected past work from the group.</p><div class="row" id="pastR"></div></section>
+<section id="current"><h2>Current Research</h2><p class="sub">What we are working on right now.</p><div class="row" id="curR"></div></section>
+<footer>© 2026 Fermi-AI Lab · Sample content — replace names, photos and DOIs with your own.</footer>
+
+<div id="ov"><div id="box" role="dialog" aria-modal="true"></div></div>
+<div id="toast">Copied to clipboard</div>
+
+<script>
+const M={
+prof:[{n:"Prof. Dr. Anand Raman",r:"Principal Investigator",y:"Since 2012",d:"DFT & Quantum Materials",topics:["Topological and 2D materials","Machine-learned interatomic potentials","High-throughput materials screening"],con:"Founded the lab and leads its AI-driven discovery program with over 60 publications.",fav:"Electronic structure of quantum materials",dur:"2012 – Present",e:"anand.raman@college.edu"}],
+phd:[{n:"Meera Krishnan",r:"Ph.D. Scholar",y:"2023",d:"Graph neural networks for crystals",topics:["Crystal graph networks","Band-gap prediction"],con:"Built the lab’s in-house band-gap dataset of 12,000 compounds.",fav:"Materials informatics",dur:"2023 – Present",e:"meera.k@college.edu"},
+{n:"Arjun Venkat",r:"Ph.D. Scholar",y:"2022",d:"Topological insulators",topics:["Spin–orbit coupling","Surface states"],con:"Identified three new candidate topological insulators via DFT.",fav:"Topological matter",dur:"2022 – Present",e:"arjun.v@college.edu"},
+{n:"Sana Fathima",r:"Ph.D. Scholar",y:"2024",d:"Thermoelectrics & ML",topics:["Phonon transport","Active learning"],con:"Developing active-learning loops to cut DFT cost by 70%.",fav:"Thermoelectric materials",dur:"2024 – Present",e:"sana.f@college.edu"}],
+msc:[{n:"Rohit Kumar",r:"M.Sc. Student",y:"2025",d:"Perovskite solar absorbers",topics:["Halide perovskites","Stability screening"],con:"Screened 300 perovskite compositions for stability.",fav:"Photovoltaics",dur:"2025 – Present",e:"rohit.k@college.edu"},
+{n:"Divya Lakshmi",r:"M.Sc. Student",y:"2025",d:"2D magnetic materials",topics:["Monolayer magnets","Exchange coupling"],con:"Computed magnetic anisotropy for CrI₃-family monolayers.",fav:"Magnetism",dur:"2025 – Present",e:"divya.l@college.edu"},
+{n:"Karthik S.",r:"M.Sc. Student",y:"2026",d:"Python workflows & automation",topics:["Workflow automation","Data pipelines"],con:"Automates the lab’s job submission and analysis pipeline.",fav:"Scientific computing",dur:"2026 – Present",e:"karthik.s@college.edu"}],
+alu:[{n:"Dr. Priya Nair",r:"Alumna · Ph.D.",y:"2017–2020",d:"Graphene nanostructures",topics:["Graphene nanoribbons","Edge states"],con:"Her thesis explained edge magnetism in zigzag nanoribbons.",fav:"Carbon materials",dur:"2017 – 2020",e:"priya.nair@alumni.edu"},
+{n:"Dr. Vikram Rao",r:"Alumnus · Ph.D.",y:"2016–2021",d:"Heusler alloys",topics:["Half-metals","Spintronics"],con:"Predicted a new half-metallic Heusler family, later synthesised.",fav:"Spintronics",dur:"2016 – 2021",e:"vikram.rao@alumni.edu"},
+{n:"Nisha Paul",r:"Alumna · M.Sc.",y:"2021–2023",d:"Oxide interfaces",topics:["LaAlO₃/SrTiO₃","Charge transfer"],con:"Modelled interface charge transfer in oxide heterostructures.",fav:"Oxide electronics",dur:"2021 – 2023",e:"nisha.p@alumni.edu"}]};
+const R={past:[
+{t:"Machine-learned band gaps of 12,000 inorganic crystals",a:"M. Krishnan, A. Raman",j:"Physical Review Materials, 2025",s:"A crystal graph neural network predicts DFT-quality band gaps in milliseconds, enabling rapid screening of inorganic compounds.",pts:["12,000-compound curated dataset","MAE of 0.12 eV vs. DFT","Open-source model released"],doi:"https://doi.org/10.1103/example.2025.001",h:210},
+{t:"Edge magnetism in zigzag graphene nanoribbons",a:"P. Nair, A. Raman",j:"Physical Review B, 2020",s:"First-principles calculations reveal how edge states give rise to magnetic ordering that can be tuned by an external field.",pts:["Spin-polarised edge states","Field-tunable gap","Agreement with STM data"],doi:"https://doi.org/10.1103/example.2020.002",h:30},
+{t:"Half-metallic Heusler alloys for spintronics",a:"V. Rao, A. Raman",j:"Journal of Applied Physics, 2021",s:"A systematic search through Heusler compounds identifies stable half-metals with high Curie temperatures.",pts:["400+ compounds screened","7 stable half-metals","Two later synthesised"],doi:"https://doi.org/10.1063/example.2021.003",h:120}],
+cur:[
+{t:"Active learning for low-cost thermoelectric discovery",a:"S. Fathima, A. Raman",j:"Ongoing · 65%",s:"We couple Bayesian active learning with DFT to find high-ZT materials using far fewer expensive calculations.",pts:["Uncertainty-guided sampling","Phonon + electron transport","Target: 70% DFT savings"],p:65,h:180},
+{t:"Candidate topological insulators from high-throughput DFT",a:"A. Venkat, A. Raman",j:"Ongoing · 45%",s:"Automated workflows compute Z₂ invariants across thousands of compounds to flag new topological phases.",pts:["Automated Z₂ calculation","3 candidates found","Experimental collaboration planned"],p:45,h:260},
+{t:"Stable lead-free perovskites for solar cells",a:"R. Kumar, A. Raman",j:"Ongoing · 30%",s:"Screening double perovskites for stability, band gap and defect tolerance as lead-free solar absorbers.",pts:["300 compositions screened","Stability maps","Defect tolerance next"],p:30,h:50}]};
+/* Member data patch. To use a real photo set img:"photo-url" (a data: URI works everywhere; web URLs work only when this file is opened locally). */
+Object.assign(M.prof[0],{n:"Dr. Dibyendu Dey",r:"Research Assistant Professor",y:"Since Dec 2024",d:"Computational Condensed Matter & Materials Physics",topics:["Materials theory, informatics and design: DFT, high-throughput, machine learning","Energy materials for solar cells, supercapacitors and batteries","Nanoscale 2D materials for spintronics and flexible electronics","Strongly correlated physics: magnetism, multiferroics, superconductivity","Quantum materials for quantum computing and information"],con:"Joined the Department of Physics and Nanotechnology, SRMIST in December 2024 after six years of postdoctoral research at the University of Central Florida, University of Maine and Arizona State University. Ph.D. from IIT Kharagpur, M.Sc. from IIT Roorkee, B.Sc. from Jadavpur University. Published in Physical Review B, Physical Review Materials, Applied Physics Letters, Advanced Materials, Nano Letters and more.",fav:"Density Functional Theory, high-throughput calculations and machine learning",dur:"Dec 2024 – Present",e:"dibyendd@srmist.edu.in",link:"https://www.srmist.edu.in/faculty/dr-dibyendu-dey/",img:"https://media.licdn.com/dms/image/v2/D4E03AQEwkj8t6lNfoQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1672080352406?e=2147483647&v=beta&t=wwPNCsxG-xyTyUKlfkUzaPRjX5D_vJuwP0DbZfPmSb0"});
+let kc=0;["phd","msc","alu"].forEach(g=>M[g].forEach(x=>{kc++;x.n="sakthivel-"+kc;x.cat=kc;x.e="sakthivel-"+kc+"@example.edu"}));
+[["past",0,"sakthivel-1, D. Dey"],["past",1,"sakthivel-7, D. Dey"],["past",2,"sakthivel-8, D. Dey"],["cur",0,"sakthivel-3, D. Dey"],["cur",1,"sakthivel-2, D. Dey"],["cur",2,"sakthivel-4, D. Dey"]].forEach(a=>R[a[0]][a[1]].a=a[2]);
+function cat(k){const f=["#f0b36a","#9aa3b2","#efe6d6","#5b5f6e","#d98b4b","#c9a27a","#f4d28c","#7d8ca3","#b88a6a"][k%9],b=["#cfe3ff","#fde7b0","#d9f0e2","#f6d5e4","#e0dcff"][k%5],e=["#2c9d5b","#e0a000","#2a6fdb"][k%3],s=k%2?'<path d="M44 30v8M50 28v9M56 30v8" stroke="rgba(0,0,0,.25)" stroke-width="2.5" stroke-linecap="round"/>':"";
+return `<svg viewBox="0 0 100 100" role="img" aria-label="Cat"><rect width="100" height="100" fill="${b}"/><path d="M20 48L22 12L46 30ZM80 48L78 12L54 30Z" fill="${f}"/><path d="M26 38L27 21L38 30ZM74 38L73 21L62 30Z" fill="#f2a7b5"/><ellipse cx="50" cy="58" rx="33" ry="29" fill="${f}"/>${s}<ellipse cx="37" cy="53" rx="7" ry="7.5" fill="#fff"/><ellipse cx="63" cy="53" rx="7" ry="7.5" fill="#fff"/><ellipse cx="37" cy="53" rx="4.5" ry="6" fill="${e}"/><ellipse cx="63" cy="53" rx="4.5" ry="6" fill="${e}"/><ellipse cx="37" cy="53" rx="1.6" ry="5" fill="#111"/><ellipse cx="63" cy="53" rx="1.6" ry="5" fill="#111"/><path d="M46 65h8l-4 4z" fill="#e57a92"/><path d="M50 69v3M50 72q-5 5-10 1M50 72q5 5 10 1" stroke="#333" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M30 66l-14-3M30 70l-14 3M70 66l14-3M70 70l14 3" stroke="#333" stroke-width="1" opacity=".6"/></svg>`}
+function av(x){return x.cat?cat(x.cat):ini(x.n)+(x.img?`<img src="${x.img}" alt="" referrerpolicy="no-referrer">`:"")}
+document.addEventListener("error",e=>{if(e.target.tagName==="IMG"&&!e.target.closest(".logo"))e.target.remove()},true);
+const $=s=>document.querySelector(s),ov=$("#ov"),box=$("#box");
+const ini=n=>n.replace(/^(Prof\.|Dr\.)\s*/,"").split(" ").map(w=>w[0]).slice(0,2).join("");
+function art(h){let p="";for(let k=0;k<3;k++){let d="M0 "+(110+k*20);for(let x=0;x<=400;x+=10)d+=" L"+x+" "+(110+k*20+Math.sin(x/32+k+h)*(24-k*5)).toFixed(1);p+=`<path d="${d}" fill="none" stroke="${k==1?"#f0b93a":"#4c8dff"}" stroke-width="2.5" opacity="${1-k*.2}"/>`}
+return `<svg class="poster" viewBox="0 0 400 200"><defs><linearGradient id="g${h}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0d2a66"/><stop offset="1" stop-color="#050b1a"/></linearGradient></defs><rect width="400" height="200" fill="url(#g${h})"/>${p}<circle cx="${60+h%200}" cy="40" r="6" fill="#f0b93a"/></svg>`}
+function person(x,i,g){return `<div class="card" tabindex="0" data-g="${g}" data-i="${i}"><div class="av">${av(x)}</div><h3>${x.n}</h3><small>${x.y}</small><span class="tag">${x.d}</span></div>`}
+["prof","phd","msc","alu"].forEach(g=>$("#"+g).innerHTML=M[g].map((x,i)=>person(x,i,g)).join(""));
+["past","cur"].forEach(g=>$("#"+(g=="past"?"pastR":"curR")).innerHTML=R[g].map((x,i)=>`<div class="card rcard" tabindex="0" data-r="${g}" data-i="${i}"><div class="meta">${x.j}</div><h3>${x.t}</h3><small>${x.a}</small>${x.p?`<div class="pbar"><i style="width:${x.p}%"></i></div>`:""}</div>`).join(""));
+const ul=a=>"<ul>"+a.map(t=>`<li>${t}</li>`).join("")+"</ul>";
+function open(h,c){box.className=c||"";box.innerHTML='<button class="x" aria-label="Close">×</button>'+h;ov.classList.add("open");document.body.style.overflow="hidden";box.scrollTop=0}
+function close(){ov.classList.remove("open");document.body.style.overflow=""}
+document.addEventListener("click",e=>{
+const c=e.target.closest(".card");
+if(c){const d=c.dataset;
+if(d.g){const x=M[d.g][d.i];open(`<div class="mrow"><div class="big">${av(x)}</div><div class="info"><h3>${x.n}</h3><p>${x.r} · ${x.y}</p><h4>Research topics</h4>${ul(x.topics)}<h4>Contributions</h4><p>${x.con}</p><h4>Favourite domain</h4><p>${x.fav}</p><h4>Duration</h4><p>${x.dur}</p><h4>Contact</h4><p><span class="mail" data-m="${x.e}" title="Click to copy">${x.e}</span></p>${x.link?`<a class="doi" href="${x.link}" target="_blank" rel="noopener">Faculty profile ↗</a>`:""}</div></div>`,"pm")}
+else{const x=R[d.r][d.i];open(`<h3>${x.t}</h3><p>${x.a} · ${x.j}</p>${art(x.h)}<p>${x.s}</p><h4>Highlights</h4>${ul(x.pts)}${x.doi?`<a class="doi" href="${x.doi}" target="_blank" rel="noopener">View publication (DOI) ↗</a>`:`<h4>Progress</h4><div class="pbar"><i style="width:${x.p}%"></i></div>`}`)}
+return}
+const m=e.target.closest(".mail");
+if(m){const t=m.dataset.m;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(()=>{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove()});
+const o=$("#toast");o.classList.add("show");setTimeout(()=>o.classList.remove("show"),1600);return}
+if(e.target===ov||e.target.closest(".x"))close()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")close();if(e.key==="Enter"&&e.target.classList.contains("card"))e.target.click()});
+/* slider: replace the gradients with your photos, e.g. background-image:url(data:...) */
+const S=[["Group photo · Lab members 2026","#0d2a66,#1d5fd1"],["Annual group meet","#1d5fd1,#c8941a"],["Conference presentation","#0b1d44,#c8941a"],["Computing cluster & workshop","#c8941a,#0d2a66"]];
+const sl=$("#slider"),dt=$("#dots");let cur=0,hold=false;
+S.forEach((s,i)=>{const d=document.createElement("div");d.className="slide"+(i?"":" on");d.style.background=`linear-gradient(135deg,${s[1]})`;d.innerHTML=`<span>${s[0]}</span>`;sl.insertBefore(d,dt);const b=document.createElement("i");if(!i)b.className="on";b.onclick=()=>go(i);dt.appendChild(b)});
+function go(n){const a=sl.querySelectorAll(".slide"),b=dt.children;a[cur].classList.remove("on");b[cur].classList.remove("on");cur=n%S.length;a[cur].classList.add("on");b[cur].classList.add("on")}
+sl.onmouseenter=()=>hold=true;sl.onmouseleave=()=>hold=false;setInterval(()=>{if(!hold&&!ov.classList.contains("open"))go(cur+1)},2500);
+/* group photo lightbox (sample captions: replace with your own) */
+const D=["Taken in August 2026 outside the department building, when the new Ph.D. scholars and M.Sc. students joined the group. It is one of the few times everyone was present together.","Taken at our annual group meeting in December 2025, where every member presented a year of progress, followed by dinner and plans for the year ahead.","Taken at a national conference in February 2026 during the poster session, where the group presented its machine-learning work on band-gap prediction.","Taken during a hands-on workshop on DFT and machine learning in the computing lab in June 2026, which trained M.Sc. students in running first-principles calculations."];
+let li=0,sx=0;
+function lbShow(i){li=(i+S.length)%S.length;const q=s=>box.querySelector(s);q("#lt").textContent=S[li][0];q("#lp").style.background=`linear-gradient(135deg,${S[li][1]})`;q("#ld").textContent=D[li];q("#lc").textContent=(li+1)+" / "+S.length;go(li)}
+sl.addEventListener("click",ev=>{if(ev.target.closest("#dots"))return;open(`<h3 id="lt"></h3><div class="lbw"><button class="nv" data-d="-1" aria-label="Previous photo">‹</button><div class="lb" id="lp"><div>📷<small>Replace this panel with your group photo</small></div></div><button class="nv" data-d="1" aria-label="Next photo">›</button></div><p id="ld"></p><p id="lc" style="text-align:center;font-weight:600;color:var(--gold)"></p>`,"wide");lbShow(cur)});
+box.addEventListener("click",e=>{const b=e.target.closest(".nv");if(b)lbShow(li+ +b.dataset.d)});
+box.addEventListener("touchstart",e=>{sx=e.touches[0].clientX},{passive:true});
+box.addEventListener("touchend",e=>{if(!box.classList.contains("wide"))return;const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)lbShow(li+(dx<0?1:-1))});
+document.addEventListener("keydown",e=>{if(ov.classList.contains("open")&&box.classList.contains("wide")){if(e.key==="ArrowRight")lbShow(li+1);if(e.key==="ArrowLeft")lbShow(li-1)}});
+/* theme */
+const root=document.documentElement,tb=$("#theme");
+function setT(t){root.dataset.theme=t;tb.textContent=t=="dark"?"☀ Day":"☾ Night"}
+let saved=null;try{saved=localStorage.getItem("theme")}catch(_){}
+setT(saved||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"));
+tb.onclick=()=>{const t=root.dataset.theme=="dark"?"light":"dark";setT(t);try{localStorage.setItem("theme",t)}catch(_){}};
+</script>
+</body>
+</html>
